@@ -3,14 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#1f1a17">
+<meta name="theme-color" content="#14234b">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.png">
+<meta name="apple-mobile-web-app-title" content="Credito">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Credito</title>
+<title>Credito · Bar Stuoie</title>
 <style>
 :root{
-  --bg:#f5f1ea; --card:#fffdf9; --ink:#1f1a17; --soft:#7a6f66; --line:#e6ded2;
-  --debt:#b3261e; --debt-bg:#fbe9e7; --paid:#2e7d4f; --paid-bg:#e5f3ea;
+  --bg:#f3f1ec; --card:#fffefb; --ink:#14234b; --soft:#6b7186; --line:#e3e0d8; --gold:#c9a24a;
+  --debt:#d6322b; --debt-bg:#fbe9e7; --paid:#2e7d4f; --paid-bg:#e5f3ea;
   --r:14px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -31,7 +34,9 @@ header h1{font-size:22px;font-weight:700;flex:1;white-space:nowrap;overflow:hidd
 
 /* login */
 #login{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;padding:24px;background:var(--ink);color:#fff}
-#login h1{font-size:28px;letter-spacing:.5px}
+#login h1{font-size:15px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:600;margin-top:-12px}
+#login img{width:120px;height:auto}
+header img{width:30px;height:auto;flex:none}
 .dots{display:flex;gap:14px;height:16px}
 .dots span{width:14px;height:14px;border-radius:50%;border:2px solid #fff6}
 .dots span.on{background:#fff;border-color:#fff}
@@ -44,8 +49,8 @@ header h1{font-size:22px;font-weight:700;flex:1;white-space:nowrap;overflow:hidd
 @keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 
 /* totale + ricerca */
-.total{background:var(--ink);color:#fff;border-radius:var(--r);padding:16px 18px;display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
-.total small{opacity:.7;font-size:14px}
+.total{border-bottom:3px solid var(--gold);background:var(--ink);color:#fff;border-radius:var(--r);padding:16px 18px;display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.total small{color:var(--gold);font-size:14px}
 .total strong{font-size:26px;font-variant-numeric:tabular-nums}
 .search{width:100%;padding:13px 16px;border-radius:var(--r);border:1px solid var(--line);background:var(--card);margin-bottom:12px;outline:none}
 .search:focus{border-color:var(--ink)}
@@ -123,6 +128,7 @@ h2{font-size:14px;text-transform:uppercase;letter-spacing:.8px;color:var(--soft)
 
 <!-- accesso -->
 <section id="login">
+  <img src="logo.svg" alt="Bar Stuoie">
   <h1>Credito</h1>
   <div class="dots" id="dots"></div>
   <div class="pad" id="pad"></div>
@@ -132,6 +138,7 @@ h2{font-size:14px;text-transform:uppercase;letter-spacing:.8px;color:var(--soft)
 <!-- elenco -->
 <section id="home" class="hidden">
   <header>
+    <img src="logo.svg" alt="">
     <h1>Credito</h1>
     <button class="icon" id="btn-refresh" aria-label="Aggiorna"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></button>
     <button class="icon" id="btn-settings" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="19" r="1.4"/></svg></button>
