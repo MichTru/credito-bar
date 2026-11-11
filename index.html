@@ -76,22 +76,26 @@ button{cursor:pointer;touch-action:manipulation}
 .link:active{background:#ffffff4d}
 .link svg{width:20px;height:20px}
 
-.total{margin:8px 16px 0;padding:18px 20px;border-radius:24px;background:#0c153499;border:1px solid #ffffff2a;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-.total small{display:block;font-size:18px;color:var(--grigio)}
-.total b{display:block;font-size:44px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+.total{padding:6px 20px 4px}
+.total small{display:block;font-size:18px;color:#ffffffd9}
+.total b{display:block;font-size:54px;font-weight:800;letter-spacing:-.035em;line-height:1.1;text-shadow:0 6px 24px #0004}
+.total b span{opacity:.6}
 
-.search{margin:16px 16px 0;display:flex;align-items:center;gap:12px;height:62px;padding:0 18px;border-radius:20px;background:#fff;color:#0c1534}
+.search{margin:18px 16px 0;display:flex;align-items:center;gap:12px;height:62px;padding:0 18px;border-radius:22px;background:#fff;color:#0c1534;box-shadow:0 14px 34px #0a102f55}
 .search svg{width:24px;height:24px;flex:none;color:#55607f}
 .search input{flex:1;min-width:0;outline:none;height:100%;font-size:20px}
 .search input::placeholder{color:#6b7594}
 .search .clr{width:36px;height:36px;border-radius:50%;background:#e4e8f3;display:grid;place-items:center}
 .search .clr svg{width:18px;height:18px}
 
-.list{margin:16px 16px 0;background:var(--pannello);border-radius:24px;overflow:hidden}
+.list{margin:16px 16px 0;background:linear-gradient(180deg,#18265a,var(--pannello));border-radius:26px;overflow:hidden;border:1px solid #ffffff12;box-shadow:0 20px 40px #0003}
+.av{width:48px;height:48px;border-radius:16px;flex:none;display:grid;place-items:center;font-weight:700;font-size:17px;background:#2f5fd833;color:#9dbbff}
+.cl.debt .av{background:#e0352d2e;color:var(--rosso-chiaro)}
+.cl.paid .av{background:#20a46433;color:var(--verde-chiaro)}
 .cl{display:flex;align-items:center;gap:14px;width:100%;min-height:76px;padding:12px 18px;text-align:left;border-top:1px solid var(--riga)}
 .cl:first-child{border-top:0}
 .cl:active,.cl.sel{background:var(--pannello-2)}
-.cl .nm{flex:1;min-width:0;font-size:21px;font-weight:600;overflow-wrap:anywhere}
+.cl .nm{flex:1;min-width:0;font-size:20px;font-weight:600;overflow-wrap:anywhere}
 .cl .v{text-align:right;flex:none}
 .cl .v b{display:block;font-size:21px;font-weight:700}
 .cl .v small{display:block;font-size:15px;color:var(--grigio)}
@@ -109,26 +113,31 @@ button{cursor:pointer;touch-action:manipulation}
 .big svg{width:26px;height:26px;flex:none}
 .big:active{transform:scale(.98);filter:brightness(1.1)}
 .big:disabled{opacity:.35;transform:none}
-.big.blu{background:var(--blu)}
-.big.rosso{background:var(--rosso)}
-.big.verde{background:var(--verde)}
+.big.blu{background:linear-gradient(180deg,#4b7cf0,#2a55c8);box-shadow:0 12px 26px #2a55c855,inset 0 1px 0 #ffffff40}
+.big.rosso{background:linear-gradient(180deg,#f0544b,#cc2a23);box-shadow:0 12px 26px #cc2a2355,inset 0 1px 0 #ffffff40}
+.big.verde{background:linear-gradient(180deg,#2fbf79,#1b9157);box-shadow:0 12px 26px #1b915755,inset 0 1px 0 #ffffff40}
 .big.vuoto{background:transparent;border:2px solid #ffffff55}
-.big.grigio{background:var(--pannello-2)}
+.big.grigio{background:linear-gradient(180deg,#2a397a,#202d66);box-shadow:inset 0 1px 0 #ffffff1f}
 
 /* cliente */
 .back{height:50px;padding:0 18px 0 10px;border-radius:25px;background:#ffffff26;border:1px solid #ffffff40;font-size:19px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
 .back svg{width:24px;height:24px}
 .back:active{background:#ffffff4d}
-.ccard{margin:10px 16px 0;padding:22px;border-radius:26px;background:#0c153999;border:1px solid #ffffff33;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);position:relative}
+.ccard{margin:10px 16px 0;padding:22px;border-radius:28px;position:relative;overflow:hidden;isolation:isolate;
+  background:linear-gradient(150deg,#ffffff5c 0%,#ffffff22 50%,#ffffff10 100%);border:1px solid #ffffff5c;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 24px 50px #0a183f66}
+.ccard::before{content:"";position:absolute;inset:-30%;z-index:-1;filter:blur(8px);
+  background:radial-gradient(40% 35% at 25% 75%,#e2443c 0%,transparent 70%),radial-gradient(40% 35% at 80% 70%,#2a5bdc 0%,transparent 70%),radial-gradient(35% 30% at 40% 15%,#ffffff99 0%,transparent 70%)}
+.ccard::after{content:"";position:absolute;inset:0;z-index:-1;background:#0c153433}
 .ccard img{position:absolute;right:18px;top:18px;width:44px}
 .ccard h2{font-size:30px;font-weight:700;line-height:1.15;padding-right:56px;overflow-wrap:anywhere}
-.ccard .lab{font-size:19px;margin-top:20px;font-weight:600}
-.ccard .bal{font-size:58px;font-weight:800;letter-spacing:-.03em;line-height:1.05}
-.ccard.debt .lab{color:var(--rosso-chiaro)}
-.ccard.paid .lab,.ccard.paid .bal{color:var(--verde-chiaro)}
+.ccard .lab{display:inline-block;font-size:17px;margin-top:22px;font-weight:700;padding:6px 12px;border-radius:99px;background:#ffffff2e}
+.ccard .bal{font-size:60px;font-weight:800;letter-spacing:-.035em;line-height:1.05;margin-top:8px;text-shadow:0 6px 24px #0003}
+.ccard.debt .lab{background:#e0352dcc;color:#fff}
+.ccard.paid .lab{background:#1b9157d9;color:#fff}
 .acts{display:grid;gap:12px;padding:18px 16px 0}
 .sec{font-size:21px;font-weight:700;padding:30px 20px 12px}
-.mvs{margin:0 16px;background:var(--pannello);border-radius:24px;overflow:hidden}
+.mvs{margin:0 16px;background:linear-gradient(180deg,#18265a,var(--pannello));border-radius:26px;overflow:hidden;border:1px solid #ffffff12}
 .day{font-size:16px;font-weight:700;color:var(--grigio);padding:16px 18px 6px;background:#ffffff08}
 .mv{display:flex;align-items:center;gap:12px;padding:14px 18px;border-top:1px solid var(--riga)}
 .day+.mv{border-top:0}
@@ -145,19 +154,19 @@ button{cursor:pointer;touch-action:manipulation}
 .blank{display:none}
 
 /* fogli */
-.veil{position:fixed;inset:0;z-index:20;background:#040919cc;display:flex;align-items:flex-end;justify-content:center;animation:fade .16s}
-.sheet{width:100%;max-width:560px;max-height:100%;overflow-y:auto;background:var(--pannello);border-radius:28px 28px 0 0;padding:20px 16px calc(16px + var(--safe-b));animation:up .22s cubic-bezier(.2,.8,.2,1)}
+.veil{position:fixed;inset:0;z-index:20;background:#040919b3;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;animation:fade .16s}
+.sheet{width:100%;max-width:560px;max-height:100%;overflow-y:auto;background:linear-gradient(180deg,#1d2b62,var(--pannello) 40%);border:1px solid #ffffff14;border-bottom:0;border-radius:30px 30px 0 0;padding:20px 16px calc(16px + var(--safe-b));animation:up .22s cubic-bezier(.2,.8,.2,1)}
 .sheet h3{font-size:24px;font-weight:700;line-height:1.2;margin-bottom:6px}
 .sheet p{font-size:19px;color:var(--grigio);margin-bottom:16px}
-.display{display:flex;align-items:baseline;justify-content:center;gap:6px;min-height:84px;margin:6px 0 10px;border-radius:20px;background:var(--fondo);padding:8px}
+.display{display:flex;align-items:baseline;justify-content:center;gap:6px;min-height:88px;margin:8px 0 10px;border-radius:22px;background:#0a1230;border:1px solid #ffffff12;padding:8px}
 .display span{font-size:34px;font-weight:600;color:var(--grigio)}
 .display b{font-size:58px;font-weight:800;letter-spacing:-.02em}
 .display b.ph{color:#ffffff40}
 .chips{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
-.chips button{height:52px;border-radius:14px;background:var(--pannello-2);font-size:19px;font-weight:700}
+.chips button{height:52px;border-radius:16px;background:#2f5fd833;color:#cfdcff;font-size:19px;font-weight:700}
 .chips button:active{background:#33438a}
 .keys{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
-.keys button{height:62px;border-radius:16px;background:#ffffff14;font-size:28px;font-weight:600}
+.keys button{height:62px;border-radius:18px;background:linear-gradient(180deg,#ffffff1c,#ffffff0d);box-shadow:inset 0 1px 0 #ffffff1a;font-size:28px;font-weight:600}
 .keys button:active{background:#ffffff40}
 .keys svg{width:28px;height:28px}
 .field{width:100%;height:60px;padding:0 18px;border-radius:16px;background:#fff;color:#0c1534;font-size:19px;outline:none;margin-bottom:12px}
@@ -266,6 +275,7 @@ const $ = s => document.querySelector(s);
 const wide = () => matchMedia("(min-width:900px)").matches;
 const fmt = n => Number(n).toLocaleString("it-IT",{minimumFractionDigits:2,maximumFractionDigits:2});
 const eur = n => "€ " + fmt(n);
+const iniziali = n => (n.match(/\p{L}+/gu) || ["?"]).slice(0,2).map(p=>p[0]).join("").toUpperCase();
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 const CROSS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
@@ -385,7 +395,7 @@ async function carica(){
 }
 
 function disegnaLista(){
-  $("#tot").textContent = eur(clienti.filter(c=>c.saldo>0.004).reduce((s,c)=>s+c.saldo,0));
+  { const [i,d] = fmt(clienti.filter(c=>c.saldo>0.004).reduce((s,c)=>s+c.saldo,0)).split(","); $("#tot").innerHTML = `€ ${i}<span>,${d}</span>`; }
   const q = $("#q").value.trim().toLowerCase();
   $("#q-clr").classList.toggle("hidden", !q);
   const l = clienti.filter(c => c.nome.toLowerCase().includes(q));
@@ -398,7 +408,7 @@ function disegnaLista(){
     const cls = c.saldo>0.004 ? "debt" : c.saldo<-0.004 ? "paid" : "zero";
     const sel = corrente && corrente.id===c.id && wide() ? " sel" : "";
     const v = cls==="debt" ? `<b>${eur(c.saldo)}</b><small>da pagare</small>` : cls==="paid" ? `<b>${eur(-c.saldo)}</b><small>a credito</small>` : `<b>In pari</b>`;
-    return `<button class="cl ${cls}${sel}" data-id="${c.id}"><span class="nm">${esc(c.nome)}</span><span class="v tab">${v}</span>${ARROW}</button>`;
+    return `<button class="cl ${cls}${sel}" data-id="${c.id}"><span class="av">${esc(iniziali(c.nome))}</span><span class="nm">${esc(c.nome)}</span><span class="v tab">${v}</span>${ARROW}</button>`;
   }).join("");
 }
 
