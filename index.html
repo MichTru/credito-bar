@@ -67,7 +67,7 @@ button{cursor:pointer;touch-action:manipulation}
 .pad button{height:84px;border-radius:50%;font-size:34px;font-weight:500;background:#ffffff22;border:1px solid #ffffff33}
 .pad button:active{background:#ffffff55}
 .pad .t{background:none;border:0;font-size:18px;font-weight:600}
-#login-msg{min-height:28px;margin-top:20px;font-size:20px;font-weight:600;color:#ffd0cd;text-align:center}
+.msg{min-height:28px;margin-top:18px;font-size:19px;font-weight:600;color:#ffd0cd;text-align:center}
 .shake{animation:shake .35s}
 @keyframes shake{25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
 
@@ -194,6 +194,45 @@ button{cursor:pointer;touch-action:manipulation}
 @keyframes pop{from{transform:scale(.85);opacity:0}}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-delay:0s!important;transition:none!important}}
 
+.cl .nm small{display:block;font-size:16px;font-weight:500;color:var(--grigio);margin-top:1px}
+.ccard .ric{font-size:18px;color:#ffffffd9;margin-top:2px;padding-right:56px}
+.sheet .who{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:14px;border-radius:18px;background:#ffffff12;border:1px solid #ffffff1a}
+.sheet .who .av{width:48px;height:48px;border-radius:15px;flex:none;display:grid;place-items:center;font-weight:700;font-size:17px;background:#ffffff26}
+.sheet .who b{display:block;font-size:24px;line-height:1.15}
+.sheet .who small{display:block;font-size:17px;color:var(--grigio)}
+.sheet .who + h3{font-size:20px;color:var(--grigio);font-weight:600}
+.seg2{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;border-radius:18px;background:#0a1230;margin-bottom:12px}
+.seg2 button{height:50px;border-radius:14px;font-size:17px;font-weight:600;color:var(--grigio)}
+.seg2 button.on{background:#fff;color:#0c1534}
+.prods{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
+.prods button{position:relative;min-height:70px;padding:10px 14px;border-radius:18px;text-align:left;background:linear-gradient(180deg,#ffffff1c,#ffffff0d);border:2px solid transparent}
+.prods button b{display:block;font-size:19px;line-height:1.2}
+.prods button span{font-size:16px;color:var(--grigio)}
+.prods button.on{border-color:#ff8a83;background:#e0352d2e}
+.prods button:active{transform:scale(.97)}
+.prods .n{position:absolute;right:10px;top:10px;min-width:30px;height:30px;border-radius:15px;padding:0 8px;display:grid;place-items:center;background:var(--rosso);font-style:normal;font-weight:800;font-size:17px}
+.cart{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:16px;background:#ffffff12;margin-bottom:12px;font-size:17px}
+.cart span{flex:1}
+.cart button{height:40px;padding:0 14px;border-radius:12px;border:1.5px solid #ffffff40;font-weight:600;font-size:16px}
+.lbl{display:block;font-size:17px;font-weight:600;color:var(--grigio);margin:4px 2px 6px}
+.warn{padding:14px 16px;border-radius:16px;background:#f5b8401f;border:1.5px solid #f5b84066;margin-bottom:12px;font-size:17px}
+.warn.stop{background:#e0352d26;border-color:#ff8a83}
+.warn b{display:block;margin-bottom:6px}
+.warn span{display:block;color:var(--grigio)}
+.rows{border-radius:20px;overflow:hidden;background:#0a1230;max-height:52vh;overflow-y:auto}
+.row{display:flex;align-items:center;gap:12px;width:100%;min-height:62px;padding:12px 16px;text-align:left;border-top:1px solid var(--riga);font-size:19px}
+.row:first-child{border-top:0}
+.row span{flex:1}
+.row.reg div{flex:1;min-width:0}
+.row.reg small{display:block;font-size:15px;color:var(--grigio)}
+.row .debt{color:var(--rosso-chiaro)} .row .paid{color:var(--verde-chiaro)}
+.display.small{min-height:70px}
+.display.small b{font-size:44px}
+.pinbox{display:flex;flex-direction:column;align-items:center;margin:4px 0 14px}
+.pinbox .dots{margin:10px 0 18px}
+.pinbox .pad{grid-template-columns:repeat(3,72px);gap:10px 20px}
+.pinbox .pad button{height:72px;font-size:30px}
+
 /* tablet: elenco e cliente affiancati */
 @media (min-width:900px){
   #app.on{display:grid;grid-template-columns:440px 1fr}
@@ -223,9 +262,9 @@ button{cursor:pointer;touch-action:manipulation}
   <img src="logo-white.png" alt="Bar Stuoie">
   <h1>Credito</h1>
   <p>Scrivi il PIN</p>
-  <div class="dots" id="dots"></div>
-  <div class="pad" id="pad"></div>
-  <div id="login-msg"></div>
+  <div class="dots"></div>
+  <div class="pad"></div>
+  <div class="msg"></div>
 </section>
 
 <div id="app" class="hidden">
@@ -251,6 +290,7 @@ button{cursor:pointer;touch-action:manipulation}
       <div class="ccard" id="ccard">
         <img src="logo-white.png" alt="">
         <h2 id="d-name"></h2>
+        <div class="ric" id="d-ric"></div>
         <div class="lab" id="d-state"></div>
         <div class="bal tab" id="d-bal"></div>
       </div>
@@ -276,7 +316,8 @@ const PIN_KEY = "credito_pin";
 
 let pin = null;
 try { pin = localStorage.getItem(PIN_KEY); } catch(e) {}
-let clienti = [], corrente = null;
+let clienti = [], prodotti = [], corrente = null;
+let titolare = null, titolareFino = 0;   // PIN titolare tenuto in memoria per 5 minuti
 
 const $ = s => document.querySelector(s);
 const wide = () => matchMedia("(min-width:900px)").matches;
@@ -284,9 +325,11 @@ const fmt = n => Number(n).toLocaleString("it-IT",{minimumFractionDigits:2,maxim
 const eur = n => "€ " + fmt(n);
 const iniziali = n => (n.match(/\p{L}+/gu) || ["?"]).slice(0,2).map(p=>p[0]).join("").toUpperCase();
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
 const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 const CROSS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
 const ARROW = '<svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+const DEL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H9l-6 7 6 7h12z"/><path d="M17 9l-6 6M11 9l6 6"/></svg>';
 
 function giorno(d){
   const oggi = new Date(), g = new Date(oggi.getFullYear(),oggi.getMonth(),oggi.getDate());
@@ -299,6 +342,7 @@ function giorno(d){
   return s[0].toUpperCase()+s.slice(1);
 }
 const ora = d => d.toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"});
+const quandoBreve = d => giorno(d).replace(/^(Oggi|Ieri)$/, m=>m.toLowerCase()) + " alle " + ora(d);
 
 async function rpc(fn, args = {}){
   const r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, {
@@ -349,53 +393,78 @@ addEventListener("resize", () => {
   else vista(corrente && !$("#detail").classList.contains("none") ? "detail" : "home");
 });
 function esci(){
-  pin = null; corrente = null;
+  pin = null; corrente = null; titolare = null;
   try { localStorage.removeItem(PIN_KEY); } catch(e) {}
   chiudi(); vista("login"); resetPad();
 }
 
-/* accesso: PIN di 4 cifre, entra da solo */
-let digits = "";
-function resetPad(){ digits=""; drawDots(); }
-function drawDots(){ $("#dots").innerHTML = [0,1,2,3].map(i=>`<span class="${i<digits.length?"on":""}"></span>`).join(""); }
-function tasto(k){
-  $("#login-msg").textContent = "";
-  if(k==="del") digits = digits.slice(0,-1);
-  else if(digits.length<4) digits += k;
-  drawDots();
-  if(digits.length===4) setTimeout(prova, 120);
+/* tastierino PIN riutilizzabile (accesso e titolare) */
+function pinPad(box, onFull){
+  let v = "";
+  const dots = box.querySelector(".dots"), pad = box.querySelector(".pad");
+  const draw = () => dots.innerHTML = [0,1,2,3].map(i=>`<span class="${i<v.length?"on":""}"></span>`).join("");
+  pad.innerHTML = ["1","2","3","4","5","6","7","8","9","","0","del"].map(k => k==="del" ? `<button class="t" data-k="del">Cancella</button>` : k==="" ? `<span></span>` : `<button data-k="${k}">${k}</button>`).join("");
+  const press = k => {
+    const msg = box.querySelector(".msg"); if(msg) msg.textContent = "";
+    if(k==="del") v = v.slice(0,-1); else if(v.length<4) v += k;
+    draw();
+    if(v.length===4){ const val = v; setTimeout(()=>onFull(val, () => { v=""; draw(); dots.classList.remove("shake"); void dots.offsetWidth; dots.classList.add("shake"); }), 120); }
+  };
+  pad.onclick = e => { const k = e.target.closest("button")?.dataset.k; if(k) press(k); };
+  draw();
+  return press;
 }
-function buildPad(){
-  const keys = ["1","2","3","4","5","6","7","8","9","","0","del"];
-  $("#pad").innerHTML = keys.map(k => k==="del" ? `<button class="t" data-k="del">Cancella</button>` : k==="" ? `<span></span>` : `<button data-k="${k}">${k}</button>`).join("");
-  $("#pad").onclick = e => { const k = e.target.closest("button")?.dataset.k; if(k) tasto(k); };
-  addEventListener("keydown", e => {
-    if($("#login").classList.contains("hidden")) return;
-    if(/^\d$/.test(e.key)) tasto(e.key); else if(e.key==="Backspace") tasto("del");
+
+/* accesso */
+let pressLogin;
+function resetPad(){ buildLogin(); }
+function buildLogin(){
+  pressLogin = pinPad($("#login"), async (val, sbagliato) => {
+    pin = val;
+    try{
+      const r = await rpc("accedi");
+      if(r==="ok"){
+        try { localStorage.setItem(PIN_KEY, pin); } catch(e) {}
+        vista("home"); carica();
+      } else {
+        pin = null;
+        $("#login .msg").textContent = r==="bloccato" ? "Troppi tentativi. Aspetta 10 minuti." : "PIN sbagliato. Riprova.";
+        sbagliato();
+      }
+    }catch(e){ pin=null; $("#login .msg").textContent = "Manca la connessione a internet."; sbagliato(); }
   });
 }
-async function prova(){
-  pin = digits;
-  try{
-    const r = await rpc("accedi");
-    if(r==="ok"){
-      try { localStorage.setItem(PIN_KEY, pin); } catch(e) {}
-      vista("home"); carica();
-    } else {
-      pin = null;
-      $("#login-msg").textContent = r==="bloccato" ? "Troppi tentativi. Aspetta 10 minuti." : "PIN sbagliato. Riprova.";
-      const d = $("#dots"); d.classList.remove("shake"); void d.offsetWidth; d.classList.add("shake");
-      resetPad();
-    }
-  }catch(e){ pin=null; $("#login-msg").textContent = "Manca la connessione a internet."; resetPad(); }
+addEventListener("keydown", e => {
+  if(!$("#login").classList.contains("hidden")){
+    if(/^\d$/.test(e.key)) pressLogin(e.key); else if(e.key==="Backspace") pressLogin("del");
+  }
+});
+
+/* PIN del titolare: chiesto quando serve, ricordato per 5 minuti */
+function chiediTitolare(motivo, onOk){
+  if(titolare && Date.now() < titolareFino) return onOk(titolare);
+  foglio(`<h3>Serve il PIN del titolare</h3><p>${esc(motivo)}</p>
+    <div class="pinbox"><div class="dots"></div><div class="pad"></div><div class="msg"></div></div>
+    <button class="big grigio" data-x>Indietro</button>`, el => {
+      el.querySelector("[data-x]").onclick = chiudi;
+      pinPad(el.querySelector(".pinbox"), async (val, sbagliato) => {
+        try{
+          const r = await rpc("verifica_titolare",{p_admin:val});
+          if(r===null) return esci();
+          if(r==="ok"){ titolare = val; titolareFino = Date.now() + 5*60e3; onOk(val); }
+          else { el.querySelector(".msg").textContent = r==="bloccato" ? "Troppi tentativi. Aspetta 10 minuti." : "PIN del titolare sbagliato."; sbagliato(); }
+        }catch(e){ offline(); sbagliato(); }
+      });
+  });
 }
 
 /* elenco */
 async function carica(){
   try{
-    const r = await rpc("elenco_clienti");
+    const [r, p] = await Promise.all([rpc("elenco_clienti"), rpc("elenco_prodotti")]);
     if(!Array.isArray(r)) return esci();
     clienti = r.map(c => ({...c, saldo:Number(c.saldo)})).sort((a,b)=>a.nome.localeCompare(b.nome,"it"));
+    prodotti = Array.isArray(p) ? p.map(x=>({...x, prezzo:Number(x.prezzo)})) : [];
     disegnaLista();
     if(corrente){ const c = clienti.find(x=>x.id===corrente.id); if(c){ corrente = {...corrente, ...c}; disegnaTesta(); } }
   }catch(e){}
@@ -403,11 +472,11 @@ async function carica(){
 
 function disegnaLista(){
   { const [i,d] = fmt(clienti.filter(c=>c.saldo>0.004).reduce((s,c)=>s+c.saldo,0)).split(","); $("#tot").innerHTML = `€ ${i}<span>,${d}</span>`; }
-  const q = $("#q").value.trim().toLowerCase();
+  const q = norm($("#q").value);
   $("#q-clr").classList.toggle("hidden", !q);
-  const l = clienti.filter(c => c.nome.toLowerCase().includes(q));
+  const l = clienti.filter(c => norm(c.nome + " " + (c.riconosci||"")).includes(q));
   if(!l.length){
-    $("#list").innerHTML = q ? `<div class="empty"><b>Nessuno si chiama “${esc(q)}”</b>Controlla il nome o aggiungilo come nuovo cliente.</div>`
+    $("#list").innerHTML = q ? `<div class="empty"><b>Nessuno si chiama “${esc($("#q").value.trim())}”</b>Controlla il nome o aggiungilo come nuovo cliente.</div>`
       : `<div class="empty"><b>Non ci sono ancora clienti</b>Tocca “Aggiungi un cliente” qui sotto.</div>`;
     return;
   }
@@ -415,28 +484,31 @@ function disegnaLista(){
     const cls = c.saldo>0.004 ? "debt" : c.saldo<-0.004 ? "paid" : "zero";
     const sel = corrente && corrente.id===c.id && wide() ? " sel" : "";
     const v = cls==="debt" ? `<b>${eur(c.saldo)}</b><small>da pagare</small>` : cls==="paid" ? `<b>${eur(-c.saldo)}</b><small>a credito</small>` : `<b>In pari</b>`;
-    return `<button class="cl ${cls}${sel}" data-id="${c.id}"><span class="av">${esc(iniziali(c.nome))}</span><span class="nm">${esc(c.nome)}</span><span class="v tab">${v}</span>${ARROW}</button>`;
+    return `<button class="cl ${cls}${sel}" data-id="${c.id}"><span class="av">${esc(iniziali(c.nome))}</span>
+      <span class="nm">${esc(c.nome)}${c.riconosci?`<small>${esc(c.riconosci)}</small>`:""}</span><span class="v tab">${v}</span>${ARROW}</button>`;
   }).join("");
 }
 
 $("#list").onclick = e => { const id = e.target.closest(".cl")?.dataset.id; if(id) apri(id); };
 $("#q").oninput = disegnaLista;
 $("#q-clr").onclick = e => { e.preventDefault(); $("#q").value = ""; disegnaLista(); };
-$("#btn-new").onclick = () => foglioNome("Aggiungi un cliente", "", "Aggiungi", async nome => {
-  const id = await rpc("nuovo_cliente",{p_nome:nome});
-  if(!id) return esci();
-  $("#q").value = "";
-  await carica(); apri(id); avviso("Cliente aggiunto", nome);
-});
+$("#btn-new").onclick = () => foglioCliente(null);
+
 $("#btn-settings").onclick = () => foglio(`
-  <h3>Impostazioni</h3><p>&nbsp;</p>
+  <h3>Impostazioni</h3><p>Le voci con il lucchetto chiedono il PIN del titolare.</p>
   <div class="stack">
-    <button class="big grigio" data-a="pin">Cambia il PIN</button>
+    <button class="big grigio" data-a="listino">🔒 Listino prezzi</button>
+    <button class="big grigio" data-a="registro">🔒 Righe annullate</button>
+    <button class="big grigio" data-a="pin">🔒 Cambia PIN dei baristi</button>
+    <button class="big grigio" data-a="pint">🔒 Cambia PIN del titolare</button>
     <button class="big vuoto" data-a="esci">Esci da questo telefono</button>
     <button class="big grigio" data-x>Chiudi</button>
   </div>`, el => {
-    el.querySelector("[data-a=pin]").onclick = foglioPin;
     el.querySelector("[data-x]").onclick = chiudi;
+    el.querySelector("[data-a=listino]").onclick = () => chiediTitolare("Per modificare il listino prezzi.", foglioListino);
+    el.querySelector("[data-a=registro]").onclick = () => chiediTitolare("Per vedere le righe annullate.", foglioRegistro);
+    el.querySelector("[data-a=pin]").onclick = () => chiediTitolare("Per cambiare il PIN dei baristi.", () => foglioPin("baristi"));
+    el.querySelector("[data-a=pint]").onclick = () => chiediTitolare("Per cambiare il PIN del titolare.", () => foglioPin("titolare"));
     el.querySelector("[data-a=esci]").onclick = () => foglio(`
       <h3>Uscire da questo telefono?</h3><p>Per rientrare servirà il PIN.</p>
       <div class="pair"><button class="big grigio" data-x>No</button><button class="big rosso" data-ok>Sì, esci</button></div>`, e2 => {
@@ -457,6 +529,7 @@ async function apri(id){
 function disegnaTesta(){
   const s = corrente.saldo;
   $("#d-name").textContent = corrente.nome;
+  $("#d-ric").textContent = corrente.riconosci || "";
   $("#ccard").className = "ccard " + (s>0.004 ? "debt" : s<-0.004 ? "paid" : "");
   $("#d-state").textContent = s>0.004 ? "Deve pagare" : s<-0.004 ? "Ha pagato in anticipo" : "È in pari";
   $("#d-bal").textContent = eur(Math.abs(s));
@@ -480,10 +553,11 @@ async function caricaMovimenti(){
       if(g!==last){ html += `<div class="day">${g}</div>`; last = g; }
       const deb = m.tipo==="debito";
       const titolo = deb ? (m.nota || "Aggiunto al conto") : (m.nota==="saldo" ? "Ha pagato tutto" : m.nota ? "Ha pagato (" + m.nota + ")" : "Ha pagato");
+      const ann = m.annullato ? ` · annullato${m.annullato_da==="titolare"?" dal titolare":""}${m.annullato_il?" "+quandoBreve(new Date(m.annullato_il)):""}` : "";
       html += `<div class="mv ${m.annullato?"off":""}">
-        <span class="nm"><b>${esc(titolo)}</b><small>ore ${ora(d)}${m.annullato?" · annullato":""}</small></span>
+        <span class="nm"><b>${esc(titolo)}</b><small>ore ${ora(d)}${ann}</small></span>
         <span class="v tab ${deb?"debt":"paid"}">${deb?"+ ":"− "}${eur(m.importo)}</span>
-        <button class="x" data-id="${m.id}" data-off="${m.annullato}" data-t="${esc(titolo)}" data-v="${m.importo}">${m.annullato?"Ripristina":"Annulla"}</button>
+        <button class="x" data-id="${m.id}" data-off="${m.annullato}" data-t="${esc(titolo)}" data-v="${m.importo}" data-c="${m.creato}">${m.annullato?"Ripristina":"Annulla"}</button>
       </div>`;
     }
     $("#mv").innerHTML = html;
@@ -493,18 +567,25 @@ async function caricaMovimenti(){
 $("#mv").onclick = e => {
   const b = e.target.closest(".x"); if(!b) return;
   const riattiva = b.dataset.off==="true";
+  const vecchio = !riattiva && (Date.now() - new Date(b.dataset.c).getTime() > 5*60e3);
+  const esegui = async adminPin => {
+    try{
+      const r = await rpc("annulla_movimento",{p_id:b.dataset.id,p_annullato:!riattiva,p_admin:adminPin||null});
+      if(r===null) return esci();
+      if(r==="serve_titolare") return chiediTitolare("Questa riga ha più di 5 minuti: per annullarla serve il titolare.", esegui);
+      if(r==="titolare_errato"){ titolare = null; return avviso("PIN del titolare sbagliato", "La riga non è stata annullata.", true); }
+      chiudi(); avviso(riattiva ? "Riga rimessa" : "Riga annullata");
+      await caricaMovimenti();
+    }catch(err){ offline(); }
+  };
   foglio(`<h3>${riattiva?"Rimettere":"Annullare"} questa riga?</h3>
-    <p>${esc(b.dataset.t)}, ${eur(b.dataset.v)}.<br>${riattiva?"Tornerà a contare nel conto.":"Non conterà più nel conto, ma resta scritta nello storico."}</p>
+    <p>${esc(b.dataset.t)}, ${eur(b.dataset.v)}.<br>${riattiva?"Tornerà a contare nel conto.":"Non conterà più nel conto, ma resta scritta nello storico."}${vecchio?"<br><b>Ha più di 5 minuti: servirà il PIN del titolare.</b>":""}</p>
     <div class="pair"><button class="big grigio" data-x>No</button><button class="big ${riattiva?"blu":"rosso"}" data-ok>${riattiva?"Sì, rimetti":"Sì, annulla"}</button></div>`, el => {
       el.querySelector("[data-x]").onclick = chiudi;
-      el.querySelector("[data-ok]").onclick = async ev => {
+      el.querySelector("[data-ok]").onclick = ev => {
         ev.currentTarget.disabled = true;
-        try{
-          const r = await rpc("annulla_movimento",{p_id:b.dataset.id,p_annullato:!riattiva});
-          if(r===null) return esci();
-          chiudi(); avviso(riattiva ? "Riga rimessa" : "Riga annullata");
-          await caricaMovimenti();
-        }catch(err){ offline(); ev.currentTarget.disabled = false; }
+        if(vecchio) chiediTitolare("Questa riga ha più di 5 minuti: per annullarla serve il titolare.", esegui);
+        else esegui();
       };
   });
 };
@@ -514,7 +595,7 @@ $("#btn-debt").onclick = () => foglioImporto("debito");
 $("#btn-pay").onclick = () => foglioImporto("pagamento");
 $("#btn-all").onclick = () => {
   const s = corrente.saldo; if(!(s>0.004)) return;
-  foglio(`<h3>${esc(corrente.nome)} ha pagato tutto?</h3>
+  foglio(`${testaCliente("Ha pagato tutto?")}
     <div class="display"><span>€</span><b class="tab">${fmt(s)}</b></div>
     <p>Il conto torna a zero.</p>
     <div class="pair"><button class="big grigio" data-x>No</button><button class="big verde" data-ok>Sì, ha pagato</button></div>`, el => {
@@ -525,18 +606,12 @@ $("#btn-all").onclick = () => {
 $("#btn-edit").onclick = () => foglio(`
   <h3>Modifica ${esc(corrente.nome)}</h3><p>&nbsp;</p>
   <div class="stack">
-    <button class="big grigio" data-a="nome">Cambia il nome</button>
+    <button class="big grigio" data-a="nome">Cambia nome o descrizione</button>
     <button class="big vuoto" data-a="arch">Togli dalla lista</button>
     <button class="big grigio" data-x>Chiudi</button>
   </div>`, el => {
     el.querySelector("[data-x]").onclick = chiudi;
-    el.querySelector("[data-a=nome]").onclick = () => foglioNome("Cambia il nome", corrente.nome, "Salva", async nome => {
-      const r = await rpc("modifica_cliente",{p_cliente:corrente.id,p_nome:nome,p_archiviato:false});
-      if(r===null) return esci();
-      corrente.nome = nome;
-      const c = clienti.find(x=>x.id===corrente.id); if(c) c.nome = nome;
-      disegnaTesta(); disegnaLista(); avviso("Nome cambiato", nome);
-    });
+    el.querySelector("[data-a=nome]").onclick = () => foglioCliente(corrente);
     el.querySelector("[data-a=arch]").onclick = () => {
       if(Math.abs(corrente.saldo)>0.004){ chiudi(); avviso("Non si può ancora", "Prima il conto deve essere a zero.", true); return; }
       foglio(`<h3>Togliere ${esc(corrente.nome)} dalla lista?</h3><p>Il suo storico resta salvato.</p>
@@ -544,7 +619,7 @@ $("#btn-edit").onclick = () => foglio(`
           e2.querySelector("[data-x]").onclick = chiudi;
           e2.querySelector("[data-ok]").onclick = async () => {
             try{
-              const r = await rpc("modifica_cliente",{p_cliente:corrente.id,p_nome:corrente.nome,p_archiviato:true});
+              const r = await rpc("modifica_cliente",{p_cliente:corrente.id,p_nome:corrente.nome,p_riconosci:corrente.riconosci||null,p_archiviato:true});
               if(r===null) return esci();
               const nome = corrente.nome;
               chiudi(); corrente = null; $("#detail").classList.add("none");
@@ -581,71 +656,220 @@ function foglio(html, bind){
 function chiudi(){ $("#sheet-root").innerHTML = ""; }
 addEventListener("keydown", e => { if(e.key==="Escape") chiudi(); });
 
-/* importo con tastierino grande */
+/* nome grande del cliente in cima ai fogli: evita scambi di persona */
+function testaCliente(domanda){
+  return `<div class="who"><span class="av">${esc(iniziali(corrente.nome))}</span><div><b>${esc(corrente.nome)}</b>${corrente.riconosci?`<small>${esc(corrente.riconosci)}</small>`:""}</div></div><h3>${domanda}</h3>`;
+}
+
+/* tastierino importo */
+function tastierino(box, onChange){
+  let val = "";
+  box.innerHTML = ["1","2","3","4","5","6","7","8","9",",","0","del"].map(k=>`<button data-k="${k}" aria-label="${k==="del"?"Cancella":k}">${k==="del"?DEL:k}</button>`).join("");
+  const numero = () => { const n = parseFloat((val||"0").replace(",", ".")); return isFinite(n) ? Math.round(n*100)/100 : 0; };
+  const testo = () => val ? (val.includes(",") ? val : Number(val).toLocaleString("it-IT")) : "";
+  box.onclick = e => {
+    const k = e.target.closest("button")?.dataset.k; if(!k) return;
+    if(k==="del") val = val.slice(0,-1);
+    else if(k===","){ if(!val.includes(",")) val = (val||"0") + ","; }
+    else { const [i, dec] = val.split(","); if(dec!==undefined){ if(dec.length<2) val += k; } else if((i||"").length<4) val = (val==="0" ? "" : val) + k; }
+    onChange(numero(), testo());
+  };
+  return { set(v){ val = v; onChange(numero(), testo()); }, reset(){ val=""; onChange(0, ""); } };
+}
+
 function foglioImporto(tipo){
   const d = tipo==="debito";
+  const conListino = d && prodotti.length > 0;
   const quick = d ? ["1,20","1,50","2,00","5,00"] : ["5,00","10,00","20,00","50,00"];
-  let val = "";
-  foglio(`<h3>${d ? "Quanto aggiungi al conto di " : "Quanto ha pagato "}${esc(corrente.nome)}?</h3>
+  const carrello = new Map();
+  let modo = conListino ? "listino" : "tasti", manuale = 0;
+
+  foglio(`${testaCliente(d ? "Cosa aggiungi al conto?" : "Quanto ha pagato?")}
     <div class="display"><span>€</span><b class="tab ph" id="disp">0,00</b></div>
-    <div class="chips">${quick.map(q=>`<button data-q="${q}">${q}</button>`).join("")}</div>
-    <div class="keys">${["1","2","3","4","5","6","7","8","9",",","0","del"].map(k=>`<button data-k="${k}" aria-label="${k==="del"?"Cancella":k}">${k==="del"?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H9l-6 7 6 7h12z"/><path d="M17 9l-6 6M11 9l6 6"/></svg>':k}</button>`).join("")}</div>
-    ${d ? `<input class="field" id="f-nota" placeholder="Cosa ha preso (se vuoi)" maxlength="200" autocomplete="off">` : ""}
+    ${conListino ? `<div class="seg2"><button data-m="listino">Dal listino</button><button data-m="tasti">Scrivi l'importo</button></div>` : ""}
+    <div id="m-listino" class="${conListino?"":"hidden"}">
+      <div class="prods">${prodotti.map(p=>`<button data-p="${p.id}"><b>${esc(p.nome)}</b><span class="tab">${eur(p.prezzo)}</span><i class="n hidden"></i></button>`).join("")}</div>
+      <div class="cart hidden"><span id="cart-txt"></span><button id="cart-clr">Svuota</button></div>
+    </div>
+    <div id="m-tasti" class="${conListino?"hidden":""}">
+      <div class="chips">${quick.map(q=>`<button data-q="${q}">${q}</button>`).join("")}</div>
+      <div class="keys"></div>
+      ${d ? `<input class="field" id="f-nota" placeholder="Cosa ha preso (se vuoi)" maxlength="200" autocomplete="off">` : ""}
+    </div>
     <div class="pair"><button class="big grigio" data-x>Indietro</button><button class="big ${d?"rosso":"verde"}" data-ok disabled>${d?"Aggiungi":"Conferma"}</button></div>`, el => {
       const disp = el.querySelector("#disp"), ok = el.querySelector("[data-ok]");
-      const numero = () => { const n = parseFloat((val||"0").replace(",", ".")); return isFinite(n) ? Math.round(n*100)/100 : 0; };
+      const totCarrello = () => Math.round([...carrello.entries()].reduce((s,[id,n])=>s + n*prodotti.find(p=>p.id===id).prezzo, 0)*100)/100;
+      const notaCarrello = () => [...carrello.entries()].map(([id,n]) => (n>1?n+" ":"") + prodotti.find(p=>p.id===id).nome).join(", ");
+      let testoTasti = "";
+      const importo = () => modo==="listino" ? totCarrello() : manuale;
       const show = () => {
-        disp.textContent = val ? (val.includes(",") ? val : Number(val).toLocaleString("it-IT")) : "0,00";
-        disp.classList.toggle("ph", !val);
-        const n = numero();
+        const n = importo();
+        disp.textContent = modo==="tasti" ? (testoTasti || "0,00") : fmt(n);
+        disp.classList.toggle("ph", !(n>0) && !(modo==="tasti" && testoTasti));
         ok.disabled = !(n>0);
         ok.textContent = n>0 ? (d ? "Aggiungi " : "Conferma ") + eur(n) : (d ? "Aggiungi" : "Conferma");
-      };
-      el.querySelector(".chips").onclick = e => { const q = e.target.closest("button")?.dataset.q; if(!q) return; val = q.replace(/,00$/,""); show(); };
-      el.querySelector(".keys").onclick = e => {
-        const k = e.target.closest("button")?.dataset.k; if(!k) return;
-        if(k==="del") val = val.slice(0,-1);
-        else if(k===","){ if(!val.includes(",")) val = (val||"0") + ","; }
-        else {
-          const [i, dec] = val.split(",");
-          if(dec!==undefined){ if(dec.length<2) val += k; }
-          else if((i||"").length<4) val = (val==="0" ? "" : val) + k;
+        el.querySelectorAll(".seg2 button").forEach(b=>b.classList.toggle("on", b.dataset.m===modo));
+        el.querySelector("#m-listino").classList.toggle("hidden", modo!=="listino");
+        el.querySelector("#m-tasti").classList.toggle("hidden", modo!=="tasti");
+        if(conListino){
+          el.querySelectorAll(".prods button").forEach(b => { const q = carrello.get(b.dataset.p)||0; const i = b.querySelector(".n"); i.textContent = q; i.classList.toggle("hidden", !q); b.classList.toggle("on", q>0); });
+          el.querySelector(".cart").classList.toggle("hidden", !carrello.size);
+          el.querySelector("#cart-txt").textContent = notaCarrello();
         }
-        show();
       };
+      const keys = tastierino(el.querySelector(".keys"), (n, t) => { manuale = n; testoTasti = t; show(); });
+      el.querySelector(".chips").onclick = e => { const q = e.target.closest("button")?.dataset.q; if(q) keys.set(q.replace(/,00$/,"")); };
+      if(conListino){
+        el.querySelector(".seg2").onclick = e => { const m = e.target.closest("button")?.dataset.m; if(m){ modo = m; show(); } };
+        el.querySelector(".prods").onclick = e => { const id = e.target.closest("button")?.dataset.p; if(!id) return; carrello.set(id, (carrello.get(id)||0)+1); show(); };
+        el.querySelector("#cart-clr").onclick = () => { carrello.clear(); show(); };
+      }
       el.querySelector("[data-x]").onclick = chiudi;
       ok.onclick = async () => {
-        const n = numero(); if(!(n>0)) return;
+        const n = importo(); if(!(n>0)) return;
         ok.disabled = true;
-        const nota = el.querySelector("#f-nota")?.value.trim();
+        const nota = modo==="listino" ? notaCarrello() : el.querySelector("#f-nota")?.value.trim();
         await registra(tipo, n, nota);
       };
       show();
   });
 }
 
-function foglioNome(titolo, val, azione, onSave){
-  foglio(`<h3>${titolo}</h3><p>Scrivi nome e cognome.</p>
-    <input class="field" id="f-nome" placeholder="Es. Mario Rossi" maxlength="80" value="${esc(val)}" autocomplete="off" autocapitalize="words">
-    <div class="pair"><button class="big grigio" data-x>Indietro</button><button class="big blu" data-ok>${azione}</button></div>`, el => {
-      const inp = el.querySelector("#f-nome");
-      el.querySelector("[data-x]").onclick = chiudi;
-      const ok = async () => {
-        const n = inp.value.trim(); if(!n){ inp.focus(); return; }
-        if(n.toLowerCase()!==val.toLowerCase() && clienti.some(c=>c.nome.toLowerCase()===n.toLowerCase())
-           && !confirm("C'è già un cliente che si chiama così. Vuoi aggiungerlo lo stesso?")) return;
-        el.querySelector("[data-ok]").disabled = true;
-        try{ await onSave(n); chiudi(); }catch(e){ offline(); el.querySelector("[data-ok]").disabled=false; }
+/* nuovo cliente / modifica, con controllo dei nomi simili */
+function simili(nome, escludi){
+  const n = norm(nome); if(n.length<2) return [];
+  const parti = n.split(" ").filter(p=>p.length>=3);
+  return clienti.filter(c => c.id!==escludi).filter(c => {
+    const cn = norm(c.nome);
+    if(cn===n) return true;
+    if(cn.includes(n) || n.includes(cn)) return true;
+    const cp = cn.split(" ");
+    return parti.some(p => cp.some(x => x===p || (p.length>=4 && x.startsWith(p.slice(0,4)))));
+  }).slice(0,4);
+}
+function foglioCliente(c){
+  const nuovo = !c;
+  foglio(`<h3>${nuovo?"Aggiungi un cliente":"Cambia nome o descrizione"}</h3>
+    <label class="lbl" for="f-nome">Nome e cognome</label>
+    <input class="field" id="f-nome" placeholder="Es. Mario Rossi" maxlength="80" value="${esc(c?.nome||"")}" autocomplete="off" autocapitalize="words">
+    <label class="lbl" for="f-ric">Come lo riconosci</label>
+    <input class="field" id="f-ric" placeholder="Es. idraulico, quello col cane" maxlength="80" value="${esc(c?.riconosci||"")}" autocomplete="off">
+    <div class="warn hidden" id="f-warn"></div>
+    <div class="pair"><button class="big grigio" data-x>Indietro</button><button class="big blu" data-ok>${nuovo?"Aggiungi":"Salva"}</button></div>`, el => {
+      const inp = el.querySelector("#f-nome"), ric = el.querySelector("#f-ric"), warn = el.querySelector("#f-warn"), ok = el.querySelector("[data-ok]");
+      const controlla = () => {
+        const s = simili(inp.value, c?.id);
+        const uguale = s.some(x => norm(x.nome)===norm(inp.value));
+        warn.classList.toggle("hidden", !s.length);
+        warn.classList.toggle("stop", uguale);
+        warn.innerHTML = s.length ? `<b>${uguale ? "Esiste già un cliente con questo nome. Aggiungi una parola per distinguerli (es. il secondo nome o il paese)." : "Attenzione, ci sono nomi simili:"}</b>${s.map(x=>`<span>${esc(x.nome)}${x.riconosci?` · ${esc(x.riconosci)}`:""}</span>`).join("")}` : "";
+        ok.disabled = !inp.value.trim() || uguale;
+        return {s, uguale};
       };
-      el.querySelector("[data-ok]").onclick = ok;
-      inp.onkeydown = e => { if(e.key==="Enter") ok(); };
+      inp.oninput = controlla;
+      el.querySelector("[data-x]").onclick = chiudi;
+      ok.onclick = async () => {
+        const nome = inp.value.trim(), r2 = ric.value.trim();
+        if(!nome) return inp.focus();
+        const {s, uguale} = controlla(); if(uguale) return;
+        if(s.length && !r2){ ric.focus(); warn.classList.add("stop"); warn.querySelector("b").textContent = "Ci sono nomi simili: scrivi come lo riconosci, così non si confondono."; return; }
+        ok.disabled = true;
+        try{
+          if(nuovo){
+            const r = await rpc("nuovo_cliente",{p_nome:nome,p_riconosci:r2||null});
+            if(r===null) return esci();
+            if(r==="doppio"){ ok.disabled=false; return avviso("Nome già usato", "Aggiungi una parola per distinguerlo.", true); }
+            $("#q").value = "";
+            await carica(); chiudi(); apri(r); avviso("Cliente aggiunto", nome);
+          } else {
+            const r = await rpc("modifica_cliente",{p_cliente:c.id,p_nome:nome,p_riconosci:r2||null,p_archiviato:false});
+            if(r===null) return esci();
+            if(r==="doppio"){ ok.disabled=false; return avviso("Nome già usato", "Aggiungi una parola per distinguerlo.", true); }
+            corrente.nome = nome; corrente.riconosci = r2||null;
+            await carica(); chiudi(); disegnaTesta(); avviso("Salvato", nome);
+          }
+        }catch(e){ offline(); ok.disabled=false; }
+      };
+      controlla();
       setTimeout(()=>inp.focus(), 80);
   });
 }
 
-function foglioPin(){
-  foglio(`<h3>Cambia il PIN</h3><p>Il nuovo PIN deve avere 4 numeri. Va usato su tutti i telefoni del bar.</p>
-    <input class="field" id="p1" type="password" inputmode="numeric" placeholder="Nuovo PIN" maxlength="4">
+/* listino prezzi (titolare) */
+function foglioListino(){
+  const lista = prodotti.length ? prodotti.map(p=>`<button class="row" data-p="${p.id}"><span>${esc(p.nome)}</span><b class="tab">${eur(p.prezzo)}</b>${ARROW}</button>`).join("")
+    : `<div class="empty">Il listino è vuoto. Aggiungi i prodotti più chiesti: compariranno come pulsanti quando si segna.</div>`;
+  foglio(`<h3>Listino prezzi</h3>
+    <div class="rows">${lista}</div>
+    <div class="stack" style="margin-top:12px"><button class="big blu" data-n>Aggiungi un prodotto</button><button class="big grigio" data-x>Chiudi</button></div>`, el => {
+      el.querySelector("[data-x]").onclick = chiudi;
+      el.querySelector("[data-n]").onclick = () => foglioProdotto(null);
+      el.querySelectorAll("[data-p]").forEach(b => b.onclick = () => foglioProdotto(prodotti.find(p=>p.id===b.dataset.p)));
+  });
+}
+function foglioProdotto(p){
+  let prezzo = p ? p.prezzo : 0;
+  foglio(`<h3>${p?"Modifica prodotto":"Nuovo prodotto"}</h3>
+    <label class="lbl" for="p-nome">Nome</label>
+    <input class="field" id="p-nome" placeholder="Es. Caffè" maxlength="40" value="${esc(p?.nome||"")}" autocomplete="off" autocapitalize="sentences">
+    <label class="lbl">Prezzo</label>
+    <div class="display small"><span>€</span><b class="tab" id="p-disp">${p?fmt(p.prezzo):"0,00"}</b></div>
+    <div class="keys"></div>
+    <div class="pair"><button class="big ${p?"vuoto":"grigio"}" data-d>${p?"Elimina":"Indietro"}</button><button class="big blu" data-ok>Salva</button></div>`, el => {
+      const disp = el.querySelector("#p-disp");
+      tastierino(el.querySelector(".keys"), (n, t) => { prezzo = n; disp.textContent = t || "0,00"; });
+      const salva = async () => {
+        const nome = el.querySelector("#p-nome").value.trim();
+        if(!nome) return el.querySelector("#p-nome").focus();
+        if(!(prezzo>0)) return avviso("Manca il prezzo", "Scrivilo con i tasti.", true);
+        try{
+          const r = await rpc("salva_prodotto",{p_admin:titolare,p_id:p?.id||null,p_nome:nome,p_prezzo:prezzo});
+          if(r===null) return esci();
+          if(r!=="ok"){ titolare=null; return avviso("PIN del titolare scaduto", "Riapri il listino.", true); }
+          await carica(); foglioListino(); avviso("Salvato", nome + " " + eur(prezzo));
+        }catch(e){ offline(); }
+      };
+      el.querySelector("[data-ok]").onclick = salva;
+      el.querySelector("[data-d]").onclick = () => {
+        if(!p) return foglioListino();
+        foglio(`<h3>Eliminare ${esc(p.nome)} dal listino?</h3><p>I conti già segnati non cambiano.</p>
+          <div class="pair"><button class="big grigio" data-x>No</button><button class="big rosso" data-ok>Sì, elimina</button></div>`, e2 => {
+            e2.querySelector("[data-x]").onclick = foglioListino;
+            e2.querySelector("[data-ok]").onclick = async () => {
+              try{
+                const r = await rpc("elimina_prodotto",{p_admin:titolare,p_id:p.id});
+                if(r===null) return esci();
+                await carica(); foglioListino(); avviso("Eliminato", p.nome);
+              }catch(e){ offline(); }
+            };
+        });
+      };
+  });
+}
+
+/* registro delle righe annullate (titolare) */
+async function foglioRegistro(){
+  foglio(`<h3>Righe annullate</h3><div class="rows" id="reg"><div class="loading">Caricamento…</div></div><button class="big grigio" data-x style="margin-top:12px">Chiudi</button>`, el => el.querySelector("[data-x]").onclick = chiudi);
+  try{
+    const r = await rpc("registro_annullamenti",{p_admin:titolare});
+    const box = $("#reg"); if(!box) return;
+    if(!Array.isArray(r) || !r.length){ box.innerHTML = `<div class="empty">Nessuna riga annullata.</div>`; return; }
+    box.innerHTML = r.map(m => {
+      const deb = m.tipo==="debito";
+      const cosa = deb ? (m.nota || "Aggiunto al conto") : (m.nota==="saldo" ? "Ha pagato tutto" : "Ha pagato");
+      return `<div class="row reg"><div><b>${esc(m.cliente)}</b><small>${esc(cosa)}, segnato ${quandoBreve(new Date(m.creato))}</small>
+        <small>Annullato ${m.annullato_il ? quandoBreve(new Date(m.annullato_il)) : ""}${m.annullato_da==="titolare" ? " dal titolare" : m.annullato_da==="barista" ? " da un barista, entro 5 minuti" : ""}</small></div>
+        <b class="tab ${deb?"debt":"paid"}">${deb?"+ ":"− "}${eur(m.importo)}</b></div>`;
+    }).join("");
+  }catch(e){ offline(); }
+}
+
+/* cambio PIN (titolare) */
+function foglioPin(quale){
+  const t = quale==="titolare";
+  foglio(`<h3>${t?"Nuovo PIN del titolare":"Nuovo PIN dei baristi"}</h3>
+    <p>${t?"Lo conosce solo il titolare. Deve essere diverso da quello dei baristi.":"Va usato su tutti i telefoni del bar. Chi è già dentro dovrà rimetterlo."}</p>
+    <input class="field" id="p1" type="password" inputmode="numeric" placeholder="Nuovo PIN, 4 numeri" maxlength="4">
     <input class="field" id="p2" type="password" inputmode="numeric" placeholder="Scrivilo ancora" maxlength="4">
     <div class="pair"><button class="big grigio" data-x>Indietro</button><button class="big blu" data-ok>Salva</button></div>`, el => {
       el.querySelector("[data-x]").onclick = chiudi;
@@ -654,9 +878,11 @@ function foglioPin(){
         if(!/^\d{4}$/.test(a)) return avviso("PIN non valido", "Servono 4 numeri.", true);
         if(a!==b) return avviso("I due PIN sono diversi", "Riscrivili uguali.", true);
         try{
-          const r = await rpc("cambia_pin",{p_nuovo:a});
+          const r = await rpc("cambia_pin",{p_admin:titolare,p_nuovo:a,p_quale:t?"titolare":"baristi"});
           if(r===null) return esci();
-          pin = a; try { localStorage.setItem(PIN_KEY, pin); } catch(e) {}
+          if(r==="uguale") return avviso("PIN non valido", "Il PIN del titolare e quello dei baristi devono essere diversi.", true);
+          if(r!=="ok"){ titolare=null; return avviso("Non salvato", "Riprova dalle impostazioni.", true); }
+          if(t) titolare = a; else { pin = a; try { localStorage.setItem(PIN_KEY, pin); } catch(e) {} }
           chiudi(); avviso("PIN cambiato");
         }catch(e){ offline(); }
       };
@@ -665,7 +891,7 @@ function foglioPin(){
 }
 
 /* avvio + aggiornamento automatico */
-buildPad(); drawDots();
+buildLogin();
 if(pin){ vista("home"); carica(); } else vista("login");
 intro();
 setInterval(() => { if(pin && document.visibilityState==="visible" && !$("#sheet-root").children.length) carica(); }, 30000);
